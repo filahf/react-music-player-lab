@@ -32,13 +32,15 @@ track.connect(gainNode).connect(audioCtx.destination);
 function Player() {
   var [playing, setPlaying] = useState(false);
   var [percentage, setPercentage] = useState(0);
+  var [volume, setVolume] = useState(1);
 
   useEffect(() => {
     setInterval(() => getPercentage(), 1);
+    gainNode.gain.value = volume;
     if (audioElement.ended) {
       setPlaying(false);
     }
-  }, []);
+  }, [volume]);
 
   function getPercentage() {
     var percent = (audioElement.currentTime / audioElement.duration) * 100;
@@ -98,6 +100,16 @@ function Player() {
           <div className="button" onClick={nextTrack}>
             <FontAwesomeIcon icon={faForward} color="white" />
           </div>
+        </div>
+        <div>
+          <input
+            type="range"
+            min="0"
+            max="2"
+            step="0.01"
+            defaultValue="1"
+            onChange={e => setVolume(e.target.value)}
+          />
         </div>
       </div>
     </div>
